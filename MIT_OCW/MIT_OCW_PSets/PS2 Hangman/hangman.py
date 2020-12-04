@@ -177,6 +177,7 @@ def hangman(secret_word):
             print("Oops! That is not a vaild letter! You have", max_num_warnings - current_num_warnings, "warnings left: ", get_guessed_word(secret_word, letters_guessed))
        
         elif user_guess not in secret_word:
+            
             if user_guess in vowels and user_guess not in letters_guessed:
                 letters_guessed.append(user_guess)
                 current_num_guesses += 2
@@ -193,7 +194,7 @@ def hangman(secret_word):
                 print("Oops! That letter is not in my word: ", get_guessed_word(secret_word, letters_guessed))
         
         elif user_guess in letters_guessed:
-            #letters_guessed.append(user_guess)
+        
             if max_num_warnings - current_num_warnings >= 1:
                 current_num_warnings += 1
                 print("Oops! You've already guessed that letter. You now have", max_num_warnings - current_num_warnings, "warnings left: ", get_guessed_word(secret_word, letters_guessed))
@@ -239,8 +240,9 @@ def match_with_gaps(my_word, other_word):
         False otherwise: 
     '''
     word_position = 0
+    my_split_word = my_word.split()
     
-    for char in my_word:
+    for char in my_split_word:
         if char == "_" or char == other_word[word_position]:
             word_position += 1
         else:
@@ -257,10 +259,40 @@ def show_possible_matches(my_word):
              that has already been revealed.
 
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    match_list = []
+    new_match_list = []
+    match_list_position = 0
+   
+    for word in wordlist:
+        if len(word) == len(my_word):
+            match_list.append(word)   
 
-
+    new_match_list = match_list[:]
+    
+    for match_len_word in match_list:
+        # print('Current word being evaluated: ', match_len_word)
+        
+        match_word_position = 0
+        
+        for letter in match_len_word:
+            # print(match_len_word, "index", match_word_position, "is", letter)
+            if my_word[match_word_position] == "_" or my_word[match_word_position] == letter:
+                # print("That means that ", my_word[match_word_position], "is == to:", letter, "or _")
+                match_word_position += 1
+            
+            else:
+                # print("That means that", my_word[match_word_position], "!=", letter)
+                new_match_list.remove(match_len_word)
+                break
+    
+        match_list_position += 1
+    
+    if len(new_match_list) == 0:
+        print("No matches found.")
+    else:
+        print(' '.join(new_match_list))
+        
+ 
 
 def hangman_with_hints(secret_word):
     '''
@@ -307,7 +339,7 @@ if __name__ == "__main__":
     # uncomment the following two lines.
     
     secret_word = "apple" #choose_word(wordlist)
-    #hangman(secret_word)
+    hangman(secret_word)
 
 ###############
     

@@ -13,8 +13,8 @@ guessed word.
 @author: nmeece
 """
 
-WORDLIST_FILENAME = "/home/nmeece/Repo/MIT_OCW/ps2/words.txt"
-my_word = "a__le"
+WORDLIST_FILENAME = "/home/nmeece/Repo/MIT_OpenCourseware_Python/MIT_OCW/MIT_OCW_PSets/PS2 Hangman/words.txt"
+my_word = "ap_l_"
 
 def load_words():
     """
@@ -35,8 +35,6 @@ def load_words():
 
 wordlist = load_words()
 
-
-my_word = "abbbb_"
 
 match_list = []
 new_match_list = []
