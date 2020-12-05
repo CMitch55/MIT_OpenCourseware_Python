@@ -14,7 +14,28 @@ guessed word.
 """
 
 WORDLIST_FILENAME = "/home/nmeece/Repo/MIT_OpenCourseware_Python/MIT_OCW/MIT_OCW_PSets/PS2 Hangman/words.txt"
-my_word = "ap_l_"
+my_word = "abbbbb_"
+other_word = "apple"
+
+def match_with_gaps(my_word, other_word):
+    
+    
+    letter_list = my_word.split('_')
+    letters_guessed = ''.join(letter_list)
+    word_position = 0
+    
+    for char in my_word:
+        
+        # Evaluates if the character in my_word is either a "_" and that other_word[same index as the _]
+        # isn't a letter that has already been guessed, OR if the character is the same in both.
+        
+        if char == "_" and other_word[word_position] not in letters_guessed or char == other_word[word_position]:
+            word_position += 1
+        else:
+            return False
+    return True
+
+
 
 def load_words():
     """
@@ -37,35 +58,28 @@ wordlist = load_words()
 
 
 match_list = []
-new_match_list = []
-match_list_position = 0
-   
+match_len_list = []
+guess_list = []
+    
+# Start by making a list of only words of the same length as my_word
 for word in wordlist:
     if len(word) == len(my_word):
-        match_list.append(word)   
+            match_len_list.append(word)   
+    
+        
+    # Clone the matchlist as to not modify the original
+    match_list = match_len_list[:]
+    
+    
+for match_word in match_list:
+        
+   if  match_with_gaps(my_word, match_word) is True:
+       guess_list.append(match_word)
 
-new_match_list = match_list[:]
     
-for match_len_word in match_list:
-    # print('Current word being evaluated: ', match_len_word)
-        
-    match_word_position = 0
-        
-    for letter in match_len_word:
-        # print(match_len_word, "index", match_word_position, "is", letter)
-        if my_word[match_word_position] == "_" or my_word[match_word_position] == letter:
-            # print("That means that ", my_word[match_word_position], "is == to:", letter, "or _")
-            match_word_position += 1
-            
-        else:
-            # print("That means that", my_word[match_word_position], "!=", letter)
-            new_match_list.remove(match_len_word)
-            break
-    
-    match_list_position += 1
-    
-if len(new_match_list) == 0:
+if len(guess_list) == 0:
     print("No matches found.")
 else:
-    print(' '.join(new_match_list))
+    print(' '.join(guess_list))
         
+ 
