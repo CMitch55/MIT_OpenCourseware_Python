@@ -97,7 +97,7 @@ def get_word_score(word, n):
         '''
         Returns the sum of the individual letter values in the word as an int.
 
-        lower_word = string
+        word = string
         '''
         lower_word = str.lower(word)
         let_score = 0
