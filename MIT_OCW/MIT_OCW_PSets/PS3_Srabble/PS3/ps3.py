@@ -213,8 +213,20 @@ def update_hand(hand, word):
     hand: dictionary (string -> int)    
     returns: dictionary (string -> int)
     """
+    new_hand = hand.copy()
+    low_word = str.lower(word)
+    try:
+        for letter in low_word:
+            if letter in new_hand and new_hand[letter] >= 1:
+                new_hand[letter] -= 1
+                if new_hand[letter] <= 0:
+                    del(new_hand[letter])
+            else:
+                continue
+    except:
+        return(print("Something went wrong while updating the hand."))
 
-    pass  # TO DO... Remove this line when you implement this function
+    return new_hand
 
 #
 # Problem #3: Test word validity
@@ -231,7 +243,22 @@ def is_valid_word(word, hand, word_list):
     returns: boolean
     """
 
-    pass  # TO DO... Remove this line when you implement this function
+    low_word = str.lower(word)
+    hand_copy = hand.copy()
+    
+    while low_word in word_list:
+        for letter in low_word:
+
+            if letter in hand_copy and hand_copy[letter] >= 1:
+                hand_copy[letter] -= 1
+                if hand_copy[letter] <= 0:
+                    del (hand_copy[letter])
+                continue    
+            else:
+                return False
+        return True
+    return False
+  
 
 #
 # Problem #5: Playing a hand
