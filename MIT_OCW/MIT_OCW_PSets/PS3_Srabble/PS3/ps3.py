@@ -180,16 +180,30 @@ def deal_hand(n):
     """
     
     hand={}
-    num_vowels = int(math.ceil(n / 3))
+    try:
+        num_vowels = int(math.ceil(n / 3))
+    except TypeError:
+        return(print('deal_hand function passed object other than int'))
+    except:
+        return(print('Error in deal_hand function'))
 
-    for i in range(num_vowels):
-        x = random.choice(VOWELS)
-        hand[x] = hand.get(x, 0) + 1
+    while num_vowels >= 1:
+        num_vowels -= 1
+        hand['*'] = hand.get('*', 0) + 1
+
+        for i in range(num_vowels):
+            x = random.choice(VOWELS)
+            while x == '*':
+                x = random.choice(VOWELS)
+                break
+            hand[x] = hand.get(x, 0) + 1
     
-    for i in range(num_vowels, n):    
-        x = random.choice(CONSONANTS)
-        hand[x] = hand.get(x, 0) + 1
-    
+        num_vowels += 1
+        
+        for i in range(num_vowels, n):    
+            x = random.choice(CONSONANTS)
+            hand[x] = hand.get(x, 0) + 1
+        break
     return hand
 
 #
