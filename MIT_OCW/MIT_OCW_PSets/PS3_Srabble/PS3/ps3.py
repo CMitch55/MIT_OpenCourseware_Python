@@ -205,7 +205,7 @@ def deal_hand(n):
             hand[x] = hand.get(x, 0) + 1
         break
     return hand
-
+print(deal_hand(7))
 #
 # Problem #2: Update a hand by removing letters
 #
@@ -259,7 +259,36 @@ def is_valid_word(word, hand, word_list):
 
     low_word = str.lower(word)
     hand_copy = hand.copy()
-    
+    vowels_list = list(VOWELS)
+    wild_guess_list = []
+    wild_guess_counter = 0
+
+
+    while '*' in low_word:
+        while len(vowels_list) >= 1 and ''.join(wild_guess_list) not in word_list:
+            wild_guess_list = []
+            for n in low_word:
+                if n != str("*"):
+                    wild_guess_list.append(n)
+                else:
+                    wild_guess_list.append(vowels_list[0])
+                    del vowels_list[0]
+                    wild_guess_counter += 1
+        wild_guess = ''.join(wild_guess_list)
+        if wild_guess in word_list:
+            for letter in low_word:
+                if letter in hand_copy and hand_copy[letter] >= 1:
+                    hand_copy[letter] -= 1
+                    if hand_copy[letter] <= 0:
+                        del(hand_copy[letter])
+                else:
+                    return False
+            return True
+        else:
+            return False
+
+
+
     while low_word in word_list:
         for letter in low_word:
 
