@@ -16,8 +16,8 @@ CONSONANTS = 'bcdfghjklmnpqrstvwxyz'
 HAND_SIZE = 7
 
 SCRABBLE_LETTER_VALUES = {
-    'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10
-}
+    'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10,
+'*': 0}
 
 # -----------------------------------
 # Helper code
@@ -313,8 +313,11 @@ def calculate_handlen(hand):
     hand: dictionary (string-> int)
     returns: integer
     """
+    handlen = 0
     
-    pass  # TO DO... Remove this line when you implement this function
+    for n in hand:
+        handlen += int(hand.get(n))
+    return (int(handlen))
 
 def play_hand(hand, word_list):
 
@@ -379,7 +382,31 @@ def play_hand(hand, word_list):
 
     # Return the total score as result of function
 
+    total_score = 0
+    word_score = 0
+    play_hand = hand.copy()
 
+    while calculate_handlen(play_hand) >= 1:
+        display_hand(play_hand)
+        word = str.lower(input('Enter word, or "!!" to indicate that you are finished:'))
+
+        if word == "!!":
+            break
+        else:
+            if is_valid_word(word, hand, word_list) == True:
+                word_score = get_word_score(word, calculate_handlen(hand))
+                total_score += word_score
+                print(word, 'earned', word_score, 'points. Total:', total_score, 'points.')
+            else:
+                print('That is not a valid word. Please choose another word.')
+        play_hand = update_hand(play_hand, word)
+    
+    if word == '!!':
+        print('Total Score:', total_score)
+    else:
+        print('Ran out of letters. Total score:', total_score)
+    
+    return int(total_score)
 
 #
 # Problem #6: Playing a game
