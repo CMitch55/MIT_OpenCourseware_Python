@@ -500,7 +500,42 @@ def play_game(word_list):
 
     word_list: list of lowercase strings
     """
-    
+    #BEGIN PSEUDOCODE
+    #Keep track of number of hands!
+    #Can only replay a hand once per hand
+    #Can only substitute a letter once per hand
+
+    #Prompt player for number of hands to play
+
+    #As long as the nubmer oh hands to play is >= 1
+
+        #Show the player their hand
+
+        #Ask if they would like to substitute a letter
+
+            #If yes substitute a letter
+
+            #Otherwise continue
+
+        #play a hand
+
+        #Ask user if they want to replay the hand
+
+            #if yes run the play hand function again.
+
+                #Add hand score to total score.
+
+            #Otherwise add hand score to total score
+
+    #Give user their total score across all hands
+
+
+    replay_count = 0
+    sub_count = 0
+
+    num_hands = int(input("Enter total number of hands"))
+        
+
     print("play_game not implemented.") # TO DO... Remove this line when you implement this function
     
 
