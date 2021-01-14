@@ -16,8 +16,8 @@ CONSONANTS = 'bcdfghjklmnpqrstvwxyz'
 HAND_SIZE = 7
 
 SCRABBLE_LETTER_VALUES = {
-    'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10
-}
+    'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10,
+'*': 0}
 
 # -----------------------------------
 # Helper code
@@ -205,7 +205,7 @@ def deal_hand(n):
             hand[x] = hand.get(x, 0) + 1
         break
     return hand
-
+print(deal_hand(7))
 #
 # Problem #2: Update a hand by removing letters
 #
@@ -259,7 +259,36 @@ def is_valid_word(word, hand, word_list):
 
     low_word = str.lower(word)
     hand_copy = hand.copy()
-    
+    vowels_list = list(VOWELS)
+    wild_guess_list = []
+    wild_guess_counter = 0
+
+
+    while '*' in low_word:
+        while len(vowels_list) >= 1 and ''.join(wild_guess_list) not in word_list:
+            wild_guess_list = []
+            for n in low_word:
+                if n != str("*"):
+                    wild_guess_list.append(n)
+                else:
+                    wild_guess_list.append(vowels_list[0])
+                    del vowels_list[0]
+                    wild_guess_counter += 1
+        wild_guess = ''.join(wild_guess_list)
+        if wild_guess in word_list:
+            for letter in low_word:
+                if letter in hand_copy and hand_copy[letter] >= 1:
+                    hand_copy[letter] -= 1
+                    if hand_copy[letter] <= 0:
+                        del(hand_copy[letter])
+                else:
+                    return False
+            return True
+        else:
+            return False
+
+
+
     while low_word in word_list:
         for letter in low_word:
 
@@ -284,8 +313,11 @@ def calculate_handlen(hand):
     hand: dictionary (string-> int)
     returns: integer
     """
+    handlen = 0
     
-    pass  # TO DO... Remove this line when you implement this function
+    for n in hand:
+        handlen += int(hand.get(n))
+    return (int(handlen))
 
 def play_hand(hand, word_list):
 
@@ -350,7 +382,31 @@ def play_hand(hand, word_list):
 
     # Return the total score as result of function
 
+    total_score = 0
+    word_score = 0
+    play_hand = hand.copy()
 
+    while calculate_handlen(play_hand) >= 1:
+        display_hand(play_hand)
+        word = str.lower(input('Enter word, or "!!" to indicate that you are finished:'))
+
+        if word == "!!":
+            break
+        else:
+            if is_valid_word(word, hand, word_list) == True:
+                word_score = get_word_score(word, calculate_handlen(hand))
+                total_score += word_score
+                print(word, 'earned', word_score, 'points. Total:', total_score, 'points.')
+            else:
+                print('That is not a valid word. Please choose another word.')
+        play_hand = update_hand(play_hand, word)
+    
+    if word == '!!':
+        print('Total Score:', total_score)
+    else:
+        print('Ran out of letters. Total score:', total_score)
+    
+    return int(total_score)
 
 #
 # Problem #6: Playing a game
@@ -383,10 +439,37 @@ def substitute_hand(hand, letter):
     letter: string
     returns: dictionary (string -> int)
     """
-    
-    pass  # TO DO... Remove this line when you implement this function
-       
-    
+
+    alphabet = str(VOWELS + CONSONANTS)
+    replacement = random.choice(alphabet)
+    sub_hand = hand.copy()
+
+    if len(hand) <= 0:
+        return(print("Oops! There aren't any letters in your hand!"))
+
+    try:
+        while letter in hand:
+            try:    
+                while replacement not in sub_hand:
+                    sub_hand[replacement] = sub_hand.pop(letter)
+                    return (sub_hand)
+                return
+
+            except:
+                return(print("Error while substituting hand."))
+
+        if len(letter) != 1:
+            return(print('Please only choose one letter to substitute.'))   
+
+        if letter not in alphabet:
+            return(print('Non-alpha character entered as letter'))         
+        
+        return(print('"', letter, '"', "isn't a letter in your hand"))   
+
+    except TypeError:
+        return(print('Unhashable object given as letter:'))
+
+
 def play_game(word_list):
     """
     Allow the user to play a series of hands
