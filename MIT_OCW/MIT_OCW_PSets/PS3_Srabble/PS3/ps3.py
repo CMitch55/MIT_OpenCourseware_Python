@@ -439,10 +439,37 @@ def substitute_hand(hand, letter):
     letter: string
     returns: dictionary (string -> int)
     """
-    
-    pass  # TO DO... Remove this line when you implement this function
-       
-    
+
+    alphabet = str(VOWELS + CONSONANTS)
+    replacement = random.choice(alphabet)
+    sub_hand = hand.copy()
+
+    if len(hand) <= 0:
+        return(print("Oops! There aren't any letters in your hand!"))
+
+    try:
+        while letter in hand:
+            try:    
+                while replacement not in sub_hand:
+                    sub_hand[replacement] = sub_hand.pop(letter)
+                    return (sub_hand)
+                return
+
+            except:
+                return(print("Error while substituting hand."))
+
+        if len(letter) != 1:
+            return(print('Please only choose one letter to substitute.'))   
+
+        if letter not in alphabet:
+            return(print('Non-alpha character entered as letter'))         
+        
+        return(print('"', letter, '"', "isn't a letter in your hand"))   
+
+    except TypeError:
+        return(print('Unhashable object given as letter:'))
+
+
 def play_game(word_list):
     """
     Allow the user to play a series of hands
