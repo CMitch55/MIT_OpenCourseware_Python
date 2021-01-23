@@ -609,8 +609,8 @@ def play_game(word_list):
                 num_hands -= 1
                 hand_score = init_score
 
-        total_score += hand_score
-#        print('Total score for this hand:', hand_score)
+            total_score += hand_score
+    #        print('Total score for this hand:', hand_score)
         
     return (int(total_score))
 
