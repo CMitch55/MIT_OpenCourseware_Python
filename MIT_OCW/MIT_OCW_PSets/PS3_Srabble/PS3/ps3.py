@@ -155,7 +155,7 @@ def display_hand(hand):
 
     hand: dictionary (string -> int)
     """
-    
+    print('Current hand:', end=' ')
     for letter in hand.keys():
         for j in range(hand[letter]):
              print(letter, end=' ')      # print all on the same line
@@ -205,7 +205,7 @@ def deal_hand(n):
             hand[x] = hand.get(x, 0) + 1
         break
     return hand
-print(deal_hand(7))
+
 #
 # Problem #2: Update a hand by removing letters
 #
@@ -381,32 +381,40 @@ def play_hand(hand, word_list):
     # so tell user the total score
 
     # Return the total score as result of function
+    try:
+        phand_score = 0
+        word_score = 0
+        working_hand = hand.copy()
+    except AttributeError:
+        return(print('Error assigning value to variable in play_hand. Or error copying hand.'))
+    except:
+        return(print('Shit broke in the variable assignments, like, wtf.'))
 
-    total_score = 0
-    word_score = 0
-    play_hand = hand.copy()
-
-    while calculate_handlen(play_hand) >= 1:
-        display_hand(play_hand)
+    while calculate_handlen(working_hand) >= 1:
+        display_hand(working_hand)
         word = str.lower(input('Enter word, or "!!" to indicate that you are finished:'))
 
         if word == "!!":
             break
         else:
             if is_valid_word(word, hand, word_list) == True:
-                word_score = get_word_score(word, calculate_handlen(hand))
-                total_score += word_score
-                print(word, 'earned', word_score, 'points. Total:', total_score, 'points.')
+                word_score = get_word_score(word, calculate_handlen(working_hand))
+                phand_score += word_score
+                print('"' + word + '"', 'earned', word_score, 'points. Total:', phand_score, 'points.')
+                print()
             else:
                 print('That is not a valid word. Please choose another word.')
-        play_hand = update_hand(play_hand, word)
+                print()
+        working_hand = update_hand(working_hand, word)
     
     if word == '!!':
-        print('Total Score:', total_score)
+        print('Total Score for this hand:', phand_score)
+        print('----------')
     else:
-        print('Ran out of letters. Total score:', total_score)
+        print('Ran out of letters.\n Total score for this hand:', phand_score)
+        print('----------')
     
-    return int(total_score)
+    return int(phand_score)
 
 #
 # Problem #6: Playing a game
@@ -448,23 +456,21 @@ def substitute_hand(hand, letter):
         return(print("Oops! There aren't any letters in your hand!"))
 
     try:
-        while letter in hand:
-            try:    
-                while replacement not in sub_hand:
-                    sub_hand[replacement] = sub_hand.pop(letter)
-                    return (sub_hand)
-                return
+        while replacement in hand:
+            replacement = random.choice(alphabet)
 
-            except:
-                return(print("Error while substituting hand."))
+        try:                
+            sub_hand[replacement] = sub_hand.pop(letter)
+            return (sub_hand)
+                
+        except:
+            return(print("Error while substituting hand."))
 
         if len(letter) != 1:
             return(print('Please only choose one letter to substitute.'))   
 
         if letter not in alphabet:
             return(print('Non-alpha character entered as letter'))         
-        
-        return(print('"', letter, '"', "isn't a letter in your hand"))   
 
     except TypeError:
         return(print('Unhashable object given as letter:'))
@@ -511,7 +517,7 @@ def play_game(word_list):
 
         #Show the player their hand
 
-        #Ask if they would like to substitute a letter
+        #Ask if they would like to substitute a letter if they haven't already this game and this isn't a replay
 
             #If yes substitute a letter
 
@@ -529,17 +535,89 @@ def play_game(word_list):
 
     #Give user their total score across all hands
 
+    yes_list = ('yes', 'y')
 
+    total_score = 0
+    num_hands = int(input("Enter total number of hands: "))
     replay_count = 0
     sub_count = 0
-
-    num_hands = int(input("Enter total number of hands"))
-        
-
-    print("play_game not implemented.") # TO DO... Remove this line when you implement this function
     
+    
+    while num_hands >= 1:
 
 
+        hand_score = 0
+        init_score = 0
+        replay_score = 0
+
+        hand = deal_hand(HAND_SIZE)
+        display_hand(hand)
+
+        if sub_count == 0:
+            if str.lower(input('Would you like to substitute a letter? ')) in yes_list:
+                
+                sub_count += 1
+                suby_hand = substitute_hand(hand, str.lower(input('Which letter would you like to replace: ')))
+                print()
+                init_score = play_hand(suby_hand, word_list)
+                                
+                if replay_count == 0:
+                    if str.lower(input('Would you like to replay the hand? ')) in yes_list:
+                        replay_count += 1
+                        replay_score = play_hand(suby_hand, word_list)
+                        
+                if replay_score > init_score:
+                    num_hands -= 1
+                    hand_score = replay_score
+                else:
+                    num_hands -= 1
+                    hand_score = init_score
+                
+            else:
+                print()
+                init_score += play_hand(hand, word_list)
+                if replay_count == 0:
+                    if str.lower(input('Would you like to replay the hand? ')) in yes_list:
+                        replay_score = 0
+                        replay_count += 1
+                        replay_score += play_hand(hand, word_list)
+                        
+                if replay_score > init_score:
+                    num_hands -= 1
+                    hand_score = replay_score
+                else:
+                    num_hands -= 1
+                    hand_score = init_score
+            
+            total_score += hand_score
+#            print('Total score for this hand:', hand_score)
+                
+        else:
+            init_score += play_hand(hand, word_list)                  
+            if replay_count == 0:
+                if str.lower(input('Would you like to replay the hand? ')) in yes_list:
+                    replay_score = 0
+                    replay_count += 1
+                    replay_score += play_hand(hand, word_list)
+                else:
+                    hand_score = init_score
+
+            if replay_score > init_score:
+                num_hands -= 1
+                hand_score = replay_score
+            else:
+                num_hands -= 1
+                hand_score = init_score
+
+        total_score += hand_score
+#        print('Total score for this hand:', hand_score)
+        
+    return (int(total_score))
+
+word_list = load_words()
+print('Total score over all hands:', play_game(word_list))
+
+   
 #
 # Build data structures used for entire session and play game
 # Do not remove the "if __name__ == '__main__':" line - this code is executed
