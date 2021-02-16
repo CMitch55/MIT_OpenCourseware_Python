@@ -70,7 +70,8 @@ class Message(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = load_words(WORDLIST_FILENAME)
 
     def get_message_text(self):
         '''
@@ -78,7 +79,8 @@ class Message(object):
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
+        copy_message = self.message_text
+        return copy_message
 
     def get_valid_words(self):
         '''
@@ -87,7 +89,9 @@ class Message(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
+        copy_list = self.valid_words.copy()
+
+        return copy_list
 
     def build_shift_dict(self, shift):
         '''
@@ -103,8 +107,47 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        pass #delete this line and replace with your code here
+        ###BEGIN PSEUDOCODE###
 
+        #import string to utilize ascii_lowercase/uppercase
+
+        #Iterate over lowercase alphabet
+
+            #If ((current index value in alphabet) - (shift)) < 0, add 26. Else, keep current value.
+
+            #Add current character to dictionary as a key with the value determined above.
+        
+        #Iterate over uppercase alphabet
+
+            #If ((current index value in alphabet) - (shift)) < 0, add 26. Else, keep current value.
+
+            #Add current character to dictionary as a key with the value determined above.
+        
+        #Return dictionary
+
+        ###END PSEUDOCODE###
+
+        import string
+
+        lower_alpha = string.ascii_lowercase
+        upper_alpha = string.ascii_uppercase
+        shift_dict = {}
+
+        for letter in lower_alpha:
+            index_shift = ((lower_alpha.index(letter)) - shift)
+            if index_shift < 0:
+                index_shift += 26
+            shift_dict[letter] = lower_alpha[index_shift]
+
+        for letter in upper_alpha:
+            index_shift = ((upper_alpha.index(letter)) - shift)
+            if index_shift < 0:
+                index_shift += 26
+            shift_dict[letter] = upper_alpha[index_shift]
+        
+        return shift_dict
+
+        
     def apply_shift(self, shift):
         '''
         Applies the Caesar Cipher to self.message_text with the input shift.
@@ -117,7 +160,33 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        pass #delete this line and replace with your code here
+        ###BEGIN PSEUDOCODE###
+
+        #Create the dictionary to be used as the cipher.
+
+        #Get the message text with which to apply the cipher to.
+
+        #Iterate over message text.
+
+            #If the character in the message is non-alpha, add it to the shifted message list as-is.
+
+            #Add the value associated with key[character] to shifted message list.
+        
+        #Return the shifted message list as a string.
+
+        ###END PSUEDOCODE###
+
+        cipher_dict = self.build_shift_dict(shift)
+        message_text = self.get_message_text()
+        shifted_message = []
+
+        for char in message_text:
+            if char in cipher_dict.keys():
+                shifted_message.append(cipher_dict[char])
+            else:
+                shifted_message.append(char)
+        return(''.join(shifted_message))
+                
 
 class PlaintextMessage(Message):
     def __init__(self, text, shift):
