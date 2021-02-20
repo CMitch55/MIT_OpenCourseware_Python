@@ -50,14 +50,14 @@ def get_story_string():
     """
     Returns: a story in encrypted text.
     """
-    f = open("story.txt", "r")
+    f = open("/home/nmeece/Repo/MIT_OpenCourseware_Python/MIT_OCW/MIT_OCW_PSets/ps4/story.txt", "r")
     story = str(f.read())
     f.close()
     return story
 
 ### END HELPER CODE ###
 
-WORDLIST_FILENAME = 'words.txt'
+WORDLIST_FILENAME = '/home/nmeece/Repo/MIT_OpenCourseware_Python/MIT_OCW/MIT_OCW_PSets/ps4/words.txt'
 
 class Message(object):
     def __init__(self, text):
@@ -339,8 +339,42 @@ if __name__ == '__main__':
 #    print('Expected Output:', (24, 'hello'))
 #    print('Actual Output:', ciphertext.decrypt_message())
 
-    #TODO: WRITE YOUR TEST CASES HERE
+    plaintext1 = PlaintextMessage('Help, please!', 3)
+    print("Input:", plaintext1.get_message_text())
+    print('Expected Output: Ebim, mibxpb!')
+    print('Actual Output:', plaintext1.get_message_text_encrypted())
+
+    print()
+    print('-------------------')
+
+    plaintext2 = PlaintextMessage('According to all known laws of aviation,', 24)
+    print('Input:', plaintext2.get_message_text())
+    print('Expected Output: Ceeqtfkpi vq cnn mpqyp ncyu qh cxkcvkqp,')
+    print('Actual Output:', plaintext2.get_message_text_encrypted())
+
+    print()
+    print('-------------------')
+
+    ciphertext1 = CiphertextMessage(plaintext1.get_message_text_encrypted())
+    print('Input:', plaintext1.get_message_text_encrypted())
+    print("Expected Output: (23, 'Help, please!')")
+    print('Actual Output:', ciphertext1.decrypt_message())
+
+    print()
+    print('-------------------')
+
+    ciphertext2 = CiphertextMessage(plaintext2.get_message_text_encrypted())
+    print('Input:', plaintext2.get_message_text_encrypted())
+    print("Expected Output: (1, 'According to all known laws of aviation,')")
+    print('Actual Output:', ciphertext2.decrypt_message())
+
+    print()
+    print('-------------------')
+
+    encrypted_story = get_story_string()
+    decrypted_story = CiphertextMessage(encrypted_story)
+    print(decrypted_story.decrypt_message())
 
     #TODO: best shift value and unencrypted story 
     
-    pass #delete this line and replace with your code here
+    
