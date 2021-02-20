@@ -266,8 +266,6 @@ class CiphertextMessage(Message):
             self.valid_words (list, determined using helper function load_words)
         '''
         Message.__init__(self, text)
-        self.message_text = text
-        self.valid_words = load_words(WORDLIST_FILENAME)
 
     def decrypt_message(self):
         '''
@@ -300,22 +298,34 @@ class CiphertextMessage(Message):
 
         ###END PSEUDOCODE###
 
-        good_word_dict = {}
+        word_list = self.get_valid_words()
+        good_word_test = []
+        decrypt_results = []
 
-        for char in range(0,27):
+        #Using every possible shift value one at a time to decrypt input message, then split
+        #individual words seperated by a space into a list.
+        for char in range(26):
             decrypted_message = self.apply_shift(char)
-            split_decrypted_message = decrypted_message.split(' ')
-            for word in split_decrypted_message:
-                good_word_count = 0
-                if is_word(self.valid_words, word) is True:
-                    good_word_count += 1
-            good_word_dict[char] = good_word_count
-        all_values = good_word_dict.items()
-        max_good_words = max(all_values)
+            decrypted_words = decrypted_message.split(' ')
+            good_word_test = []
 
-        solution = (max_good_words[0], self.apply_shift(max_good_words[1]))
-        print(solution)
-        return(solution)
+            #Evaluate each word in the decrypted message list to determine if they are valid
+            #words or not. Done by appending 1 to a list for each good word.
+            for word in decrypted_words:
+                if is_word(word_list, word):
+                    good_word_test.append(1)
+                else:
+                    good_word_test.append(0)
+
+            #Keep a running list of results for each shift value represented as a tuple of:
+            #((total number of good words for a shift value), (shift value), (decrypted message))
+            decrypt_results.append((sum(good_word_test), char, decrypted_message))
+
+        #Find a a solution with or tied for the greatest number of valid words. Strip off the
+        #number of good words and return the shift value used and the decrypted message.
+        best_decrypt = max(decrypt_results)
+        solution = best_decrypt[1:3]
+        return solution       
 
 if __name__ == '__main__':
 
