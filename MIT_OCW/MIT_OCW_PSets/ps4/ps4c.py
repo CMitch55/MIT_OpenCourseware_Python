@@ -1,6 +1,6 @@
 # Problem Set 4C
-# Name: <your name here>
-# Collaborators:
+# Name: Nygel M.
+# Collaborators: ME
 # Time Spent: x:xx
 
 import string
@@ -70,7 +70,8 @@ class SubMessage(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = load_words(WORDLIST_FILENAME)
     
     def get_message_text(self):
         '''
@@ -78,7 +79,8 @@ class SubMessage(object):
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
+        copy_text = self.message_text
+        return copy_text
 
     def get_valid_words(self):
         '''
@@ -87,7 +89,8 @@ class SubMessage(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
+        copy_list = self.valid_words.copy()
+        return copy_list
                 
     def build_transpose_dict(self, vowels_permutation):
         '''
@@ -109,7 +112,25 @@ class SubMessage(object):
                  another letter (string). 
         '''
         
-        pass #delete this line and replace with your code here
+        transpose_dict = {}
+        upper_vowel_perm = vowels_permutation.upper()
+
+        #Add all consonants to the dictionary with matching value.
+        for char in CONSONANTS_LOWER:
+            transpose_dict[char] = char
+        #Vowel counter for adding vowel_permutation at vowel_index as value to corresponding
+        #key.
+        vowel_index = 0
+        for char in VOWELS_LOWER:            
+            transpose_dict[char] = vowels_permutation[vowel_index]
+            vowel_index += 1
+        for char in CONSONANTS_UPPER:
+            transpose_dict[char] = char
+        vowel_index = 0
+        for char in VOWELS_UPPER:            
+            transpose_dict[char] = upper_vowel_perm[vowel_index]
+            vowel_index += 1
+        return transpose_dict
     
     def apply_transpose(self, transpose_dict):
         '''
@@ -119,7 +140,17 @@ class SubMessage(object):
         on the dictionary
         '''
         
-        pass #delete this line and replace with your code here
+        pre_transpose_text = self.get_message_text()
+        transpose_dict = self.build_transpose_dict('eaiuo')
+        encrypted_message = []
+
+        for char in pre_transpose_text:
+            if char in transpose_dict.keys():
+                encrypted_message.append(transpose_dict[char])
+            else:
+                encrypted_message.append(char)
+        return(''.join(encrypted_message))   
+
         
 class EncryptedSubMessage(SubMessage):
     def __init__(self, text):
