@@ -141,7 +141,6 @@ class SubMessage(object):
         '''
         
         pre_transpose_text = self.get_message_text()
-        transpose_dict = self.build_transpose_dict('eaiuo')
         encrypted_message = []
 
         for char in pre_transpose_text:
@@ -163,7 +162,8 @@ class EncryptedSubMessage(SubMessage):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        SubMessage.__init__(self, text)
+        
 
     def decrypt_message(self):
         '''
@@ -183,7 +183,42 @@ class EncryptedSubMessage(SubMessage):
         
         Hint: use your function from Part 4A
         '''
-        pass #delete this line and replace with your code here
+
+        ###BEGIN PSEUDOCODE###
+
+        #Generate all permutations of vowels
+
+        #For each vowel permutation, build a transpose dictionary and append to a list
+
+        #Split ecrypted message into a list of individual words.
+
+            #Check the validity of each word and append 1 to a list for each good word
+            #and 0 for non-good word.
+
+            #Generate a list with the number of good words and the associated decrypted message.
+        
+        #Establish wich permutation generated the greatest number of good words and return that 
+        #decrypted message.
+
+        ###END PSEUDOCODE###
+        
+
+        num_good_words = 0
+        encrypted_message = self.get_message_text
+        vowel_perms = get_permutations('aeiou')
+
+        for perm in vowel_perms:
+            encrypted_words = encrypted_message.split(' ')
+            word_list = self.get_valid_words()
+            good_word_test = []
+            
+            for word in encrypted_words:
+                if is_word(wordlist, word):
+                    good_word_test.append(1)
+                else:
+                    good_word_test.append(0)
+
+        
     
 
 if __name__ == '__main__':
