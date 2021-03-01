@@ -51,7 +51,7 @@ def is_word(word_list, word):
 
 ### END HELPER CODE ###
 
-WORDLIST_FILENAME = 'words.txt'
+WORDLIST_FILENAME = '/home/nmeece/Repo/MIT_OpenCourseware_Python/MIT_OCW/MIT_OCW_PSets/ps4/words.txt'
 
 # you may find these constants helpful
 VOWELS_LOWER = 'aeiou'
@@ -203,23 +203,36 @@ class EncryptedSubMessage(SubMessage):
         ###END PSEUDOCODE###
         
 
-        num_good_words = 0
-        encrypted_message = self.get_message_text
+        transpose_dict_list = []
+        dec_message_list = []
         vowel_perms = get_permutations('aeiou')
+        word_list = self.get_valid_words()
 
         for perm in vowel_perms:
-            encrypted_words = encrypted_message.split(' ')
-            word_list = self.get_valid_words()
-            good_word_test = []
-            
-            for word in encrypted_words:
-                if is_word(wordlist, word):
-                    good_word_test.append(1)
-                else:
-                    good_word_test.append(0)
+            transpose_dict_list.append(self.build_transpose_dict(perm))
+        for dic in transpose_dict_list:
+            dec_message = self.apply_transpose(dic)
+            dec_message_list.append(dec_message)
 
+        total_results = []   
+        for message in dec_message_list:
+            num_good_words = []
+            decrypted_words = message.split(' ')
+            for word in decrypted_words:
+                if is_word(word_list, word):
+                    num_good_words.append(1)
+                else:
+                    num_good_words.append(0)
+                
+            total_results.append((sum(num_good_words), message))
         
-    
+        best_result = max(total_results)
+        
+        if best_result[0] <= 0:
+            return self.get_message_text()
+        else:
+            return best_result[1]
+
 
 if __name__ == '__main__':
 
@@ -232,5 +245,29 @@ if __name__ == '__main__':
     print("Actual encryption:", message.apply_transpose(enc_dict))
     enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
     print("Decrypted message:", enc_message.decrypt_message())
-     
-    #TODO: WRITE YOUR TEST CASES HERE
+    print(" ")
+    print('---------------')
+
+    #User Test Case 1
+    message = SubMessage('Howdy, Stranger!')
+    permutation = 'uoiea'
+    enc_dict = message.build_transpose_dict(permutation)
+    print("Original message:", message.get_message_text(),'Permutation:', permutation)
+    print("Expected encryption:", "Hewdy, Strungor!")
+    print("Actual encryption:", message.apply_transpose(enc_dict))
+    enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
+    print("Decrypted message:", enc_message.decrypt_message())
+    print(" ")
+    print('---------------')
+    
+    #User Test Case 2
+    message = SubMessage("Friendship is Key!")
+    permutation = "iuaeo"
+    enc_dict = message.build_transpose_dict(permutation)
+    print("Original message:", message.get_message_text(),'Permutation:', permutation)
+    print("Expected encryption:", "Fraundshap as Kuy!")
+    print("Actual encryption:", message.apply_transpose(enc_dict))
+    enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
+    print("Decrypted message:", enc_message.decrypt_message())
+    print(" ")
+    print('---------------')
