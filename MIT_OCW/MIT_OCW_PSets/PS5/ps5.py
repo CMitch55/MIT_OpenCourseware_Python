@@ -54,7 +54,38 @@ def process(url):
 
 # Problem 1
 
-# TODO: NewsStory
+class NewsStory(object):
+    def __init__(guid, title, description, link, pubdate):
+        '''
+        Initializes a NewsStory object.
+
+        globally unique identifier (GUID)   - a string
+        title                               - a string
+        description                         - a string
+        link to more content                - a string
+        pubdate                             - a datetime
+        '''
+        self.guid = guid
+        self.title = title
+        self.description = description
+        self.link = link
+        self.pubdate = pubdate
+
+    def get_guid(self):
+        return self.guid
+
+    def get_title(self):
+        return self.title
+    
+    def get_description(self):
+        return self.description
+    
+    def get_link(self):
+        return self.link
+    
+    def get_pubdate(self):
+        return self.pubdate
+        
 
 
 #======================
@@ -70,10 +101,48 @@ class Trigger(object):
         # DO NOT CHANGE THIS!
         raise NotImplementedError
 
-# PHRASE TRIGGERS
+# PHRASE TRIGGERS  
 
 # Problem 2
 # TODO: PhraseTrigger
+class PhraseTrigger(Trigger):
+    '''
+    Child class of Trigger. Evaluates for the presence of a legal string
+    a phrase is: one or more words seperated by a space and without
+    punctuation.
+    '''
+    def __init__(self, phrase):
+        self.phrase = phrase.lower()
+    
+    def get_phrase(self):
+        '''
+        Safely returns phrase
+        '''
+        return self.phrase()
+
+    def is_phrase_in(self, text):
+        '''
+        Takes in the string to find the phrase in.
+        '''
+        text = text.lower()
+        for char in string.punctuation:
+            text = text.replace(char, ' ')
+        word_list = text.split()
+        sep_phrase = self.phrase.split()
+        test = []
+        i = 0
+        for p_word in sep_phrase:
+            for i, t_word in enumerate(word_list):
+                if p_word == t_word:
+                    test.append(i)
+                    
+        match = True
+        if len(test) < len(sep_phrase):
+            return False
+        for i in range(len(test) - 1):
+            if test[i + 1] - test[i] != 1:
+                match = False
+        return match     
 
 # Problem 3
 # TODO: TitleTrigger
