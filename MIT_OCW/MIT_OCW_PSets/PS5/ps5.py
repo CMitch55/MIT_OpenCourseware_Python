@@ -55,7 +55,7 @@ def process(url):
 # Problem 1
 
 class NewsStory(object):
-    def __init__(guid, title, description, link, pubdate):
+    def __init__(self, guid, title, description, link, pubdate):
         '''
         Initializes a NewsStory object.
 
@@ -107,9 +107,8 @@ class Trigger(object):
 # TODO: PhraseTrigger
 class PhraseTrigger(Trigger):
     '''
-    Child class of Trigger. Evaluates for the presence of a legal string
-    a phrase is: one or more words seperated by a space and without
-    punctuation.
+    Child class of Trigger. Evaluates for the presence of a phrase within a string.
+    Phrase: one or more words seperated by a space and without punctuation.
     '''
     def __init__(self, phrase):
         self.phrase = phrase.lower()
@@ -145,10 +144,24 @@ class PhraseTrigger(Trigger):
         return match     
 
 # Problem 3
-# TODO: TitleTrigger
+class TitleTrigger(PhraseTrigger):
+    '''
+    Inherits methods from PhraseTrigger and Trigger.
+    Returns alert (True) if phrase found in story title.
+    '''
+    
+    def evaluate(self, story):
+        return self.is_phrase_in(story.get_title())
 
 # Problem 4
 # TODO: DescriptionTrigger
+class DescriptionTrigger(PhraseTrigger):
+    '''
+    Inherits methods from Phrase Trigger and Trigger.
+    Returns alert (True) if phrase found in story description.
+    '''
+    def evaluate(self, story):
+        return self.is_phrase_in(story.get_description())
 
 # TIME TRIGGERS
 
