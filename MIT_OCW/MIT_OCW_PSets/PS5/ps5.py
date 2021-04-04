@@ -154,7 +154,6 @@ class TitleTrigger(PhraseTrigger):
         return self.is_phrase_in(story.get_title())
 
 # Problem 4
-# TODO: DescriptionTrigger
 class DescriptionTrigger(PhraseTrigger):
     '''
     Inherits methods from Phrase Trigger and Trigger.
@@ -166,14 +165,32 @@ class DescriptionTrigger(PhraseTrigger):
 # TIME TRIGGERS
 
 # Problem 5
-# TODO: TimeTrigger
-# Constructor:
-#        Input: Time has to be in EST and in the format of "%d %b %Y %H:%M:%S".
-#        Convert time from string to a datetime before saving it as an attribute.
+class TimeTrigger(Trigger):
+    '''
+    Abstract Class. Subclass of Trigger. 
+
+    Alerts when a specified time appears in a NewsStory.
+
+    Constructor:
+        time = EST as a ​ string in the format of "3 Oct 2016 17:00:10 "
+    
+    '''
+    def __init__(self, time):
+        self.time = datetime.strptime(time, "%d %b %Y %H:%M:%S")
+    
 
 # Problem 6
 # TODO: BeforeTrigger and AfterTrigger
 
+class BeforeTrigger(TimeTrigger):
+    '''
+    Subclass of TimeTrigger.
+
+    Alerts when a NewsStory is released before a specified datetime.    
+    '''
+    def evaluate(self, story):
+
+        
 
 # COMPOSITE TRIGGERS
 
@@ -197,7 +214,7 @@ def filter_stories(stories, triggerlist):
     Takes in a list of NewsStory instances.
 
     Returns: a list of only the stories for which a trigger in triggerlist fires.
-    """
+    """   
     # TODO: Problem 10
     # This is a placeholder
     # (we're just returning all the stories, with no filtering)
