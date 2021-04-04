@@ -177,7 +177,7 @@ class TimeTrigger(Trigger):
     '''
     def __init__(self, time):
         time = datetime.strptime(time, "%d %b %Y %H:%M:%S")
-        time.replace(tzinfo=pytz.timezone("EST"))
+        time = time.replace(tzinfo=pytz.timezone("EST"))
         self.time = time
     
 
@@ -191,6 +191,18 @@ class BeforeTrigger(TimeTrigger):
     Alerts when a NewsStory is released before a specified datetime.    
     '''
     def evaluate(self, story):
+        return self.time > story.get_pubdate().replace(tzinfo=pytz.timezone("EST"))
+
+class AfterTrigger(TimeTrigger):
+    '''
+    Subclass of TimeTrigger.
+
+    Alerts when a NewsStroy is released after a specified datetime.
+    '''
+    def evaluate(self, story):
+        return self.time < story.get_pubdate().replace(tzinfo=pytz.timezone("EST"))
+
+
 
 
 
