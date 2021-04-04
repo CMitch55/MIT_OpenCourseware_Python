@@ -176,7 +176,9 @@ class TimeTrigger(Trigger):
     
     '''
     def __init__(self, time):
-        self.time = datetime.strptime(time, "%d %b %Y %H:%M:%S")
+        time = datetime.strptime(time, "%d %b %Y %H:%M:%S")
+        time.replace(tzinfo=pytz.timezone("EST"))
+        self.time = time
     
 
 # Problem 6
@@ -190,7 +192,7 @@ class BeforeTrigger(TimeTrigger):
     '''
     def evaluate(self, story):
 
-        
+
 
 # COMPOSITE TRIGGERS
 
