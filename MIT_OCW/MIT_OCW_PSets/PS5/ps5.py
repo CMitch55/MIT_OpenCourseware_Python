@@ -226,10 +226,8 @@ class AndTrigger(Trigger):
         self.trig2 = trig2
 
     def evaluate(self, NewsStory):
-        if self.trig1.evaluate(NewsStory) and self.trig2.evaluate(NewsStory):
-            return True
-        else:
-            return False
+        return self.trig1.evaluate(NewsStory) and self.trig2.evaluate(NewsStory)
+
 
 # Problem 9
 # TODO: OrTrigger
@@ -311,17 +309,17 @@ def read_trigger_config(filename):
         if trig[1] == "TITLE":
             trigger_dict[trig[0]] = TitleTrigger(trig[2])
         elif trig[1] == "DESCRIPTION":
-            trigger_dict[trig[0]] == DescriptionTrigger(trig[2])
+            trigger_dict[trig[0]] = DescriptionTrigger(trig[2])
         elif trig[1] == "BEFORE":
-            trigger_dict[trig[0]] == BeforeTrigger(trig[2])
+            trigger_dict[trig[0]] = BeforeTrigger(trig[2])
         elif trig[1] == "AFTER":
-            trigger_dict[trig[0]] == AfterTrigger(trig[2])
+            trigger_dict[trig[0]] = AfterTrigger(trig[2])
         elif trig[1] == "NOT":
-            trigger_dict[trig[0]] == NotTrigger(trig[2])
+            trigger_dict[trig[0]] = NotTrigger(trig[2])
         elif trig[1] == "AND":
-            trigger_dict[trig[0]] == AndTrigger(trig[2], trig[3])
+            trigger_dict[trig[0]] = AndTrigger(trigger_dict[trig[2]], trigger_dict[trig[3]])
         elif trig[1] == "OR":
-            trigger_dict[trig[0]] == OrTrigger(trig[2], trig[3])
+            trigger_dict[trig[0]] = OrTrigger(trigger_dict[trig[2]], trigger_dict[trig[3]])
         elif trig[0] == "ADD":
             for x in range(1, len(trig)):
                 trigger_list.append(trigger_dict[trig[x]])
@@ -332,7 +330,7 @@ def read_trigger_config(filename):
 
 
 
-    print(lines) # for now, print it so you see what it contains!
+    #print(lines) # for now, print it so you see what it contains!
 
 
 
