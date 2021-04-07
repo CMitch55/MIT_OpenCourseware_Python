@@ -256,9 +256,16 @@ def filter_stories(stories, triggerlist):
     Returns: a list of only the stories for which a trigger in triggerlist fires.
     """   
     # TODO: Problem 10
-    # This is a placeholder
-    # (we're just returning all the stories, with no filtering)
-    return stories
+    # OUTLINE
+        #Apply trigger list to each element in stories
+            #If trigger is true, add that story to a triggered list
+        #Return Trigger list
+    triggered_stories = []
+    for story in stories:
+        for trigger in triggerlist:
+            if trigger.evaluate(story):
+                triggered_stories.append(story)
+    return triggered_stories
 
 
 
@@ -296,9 +303,9 @@ def main_thread(master):
     # A sample trigger list - you might need to change the phrases to correspond
     # to what is currently in the news
     try:
-        t1 = TitleTrigger("election")
-        t2 = DescriptionTrigger("Trump")
-        t3 = DescriptionTrigger("Clinton")
+        t1 = TitleTrigger("mask")
+        t2 = DescriptionTrigger("mask")
+        t3 = DescriptionTrigger("health")
         t4 = AndTrigger(t2, t3)
         triggerlist = [t1, t4]
 
@@ -340,7 +347,7 @@ def main_thread(master):
             stories = process("http://news.google.com/news?output=rss")
 
             # Get stories from Yahoo's Top Stories RSS news feed
-            stories.extend(process("http://news.yahoo.com/rss/topstories"))
+            #stories.extend(process("http://news.yahoo.com/rss/topstories"))
 
             stories = filter_stories(stories, triggerlist)
 
