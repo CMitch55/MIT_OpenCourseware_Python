@@ -1,0 +1,42 @@
+// trigger file - if you've done problem 9 but no stories are popping up, you
+// should edit this file to contain triggers that will fire on current news
+// stories!
+
+// title trigger named t1
+t1,TITLE,Biden
+
+// description trigger named t2
+t2,DESCRIPTION,Biden
+
+// description trigger named t3
+t3,DESCRIPTION,Clinton
+
+// after trigger named t4
+t4,AFTER,3 Oct 2016 17:00:10
+
+// composite trigger named t4
+t5,AND,t2,t3
+
+// composite trigger named t4
+t6,AND,t1,t4
+
+// the trigger list contains t1 and t4
+ADD,t5,t6
+
+// description trigger named t7
+t7,DESCRIPTION,XRP
+
+// description trigger named t8
+t8,DESCRIPTION,Ripple
+
+//composite trigger named t9
+t9,AND,t7,t8
+
+// add to trigger list t9
+ADD,t9
+
+// Description trigger named t10
+t10,DESCRIPTION,COVID
+
+// add to trigger list t10
+ADD,t10
